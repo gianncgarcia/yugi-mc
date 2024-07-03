@@ -1,0 +1,16 @@
+{
+	"required": true,
+	"package": "com.yugimc.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"BackgroundRendererMixin",
+		"ClientBrandRetrieverMixin",
+		"GameRendererMixin",
+		"MinecraftZoomMixin",
+		"MinecraftClientMixin",
+		"WorldRendererMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
