@@ -25,8 +25,8 @@ public class ClientPlayerEntityMixin
     @Inject(at = @At(value = "FIELD",
             target = "Lnet/minecraft/client/MinecraftClient;currentScreen:Lnet/minecraft/client/gui/screen/Screen;",
             opcode = Opcodes.GETFIELD,
-            ordinal = 0), method = "updateNausea()V")
-    private void beforeUpdateNausea(CallbackInfo ci)
+            ordinal = 0), method = "tickNausea(Z)V")
+    private void beforeTickNausea(boolean fromPortalEffect, CallbackInfo ci)
     {
         if(!YugiClient.pgg)
             return;
@@ -38,7 +38,7 @@ public class ClientPlayerEntityMixin
     @Inject(at = @At(value = "FIELD",
             target = "Lnet/minecraft/client/network/ClientPlayerEntity;nauseaIntensity:F",
             opcode = Opcodes.GETFIELD,
-            ordinal = 1), method = {"updateNausea()V"})
+            ordinal = 1), method = "tickNausea(Z)V")
     private void afterUpdateNausea(CallbackInfo ci)
     {
         if(tempCurrentScreen == null)

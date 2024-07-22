@@ -5,6 +5,8 @@
 	"mixins": [
 		"BackgroundRendererMixin",
 		"ClientBrandRetrieverMixin",
+		"ClientPlayerEntityMixin",
+		"EntityRendererMixin",
 		"GameRendererMixin",
 		"MinecraftZoomMixin",
 		"MinecraftClientMixin",

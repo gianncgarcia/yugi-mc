@@ -2,6 +2,7 @@ package com.yugimc;
 
 import com.yugimc.util.ModCommandRegister;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.client.MinecraftClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,5 +27,6 @@ public class YugiMC implements ModInitializer {
         System.out.println("Yugi+ is now Running!");
 
 		LOGGER.info("Hello Fabric world!");
+
 	}
 }
