@@ -1,0 +1,20 @@
+{
+    "required": true,
+    "package": "com.yugimc.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "mixins": [
+        "FogRendererMixin",
+        "ClientBrandRetrieverMixin",
+        "EntityRendererMixin",
+        "EntityMixin",
+        "CameraZoomMixin",
+        "GameRendererMixin",
+        "LocalPlayerMixin",
+        "MinecraftMixin",
+        "MultiPlayerGameModeMixin",
+        "LivingEntityMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}
