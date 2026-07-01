@@ -28,11 +28,31 @@ public enum YugiClient {
     public static boolean entityOutlineAll = false;
     public static boolean nametagSneak = true;
     public static boolean noMiningCooldown = true;
-    public static java.util.HashSet<String> outlinedEntities = new java.util.HashSet<>();
-    public static java.util.HashSet<String> outlinedPlayers = new java.util.HashSet<>();
+    public static java.util.HashMap<String, Integer> outlinedEntities = new java.util.HashMap<>();
+    public static java.util.HashMap<String, Integer> outlinedPlayers = new java.util.HashMap<>();
     public static final java.util.Map<Identifier, Integer> MOB_COLORS = new java.util.HashMap<>();
+    public static final java.util.Map<String, Integer> COLOR_NAMES = new java.util.HashMap<>();
 
     static {
+        var cn = COLOR_NAMES;
+        cn.put("black", 0x000000);
+        cn.put("dark_blue", 0x0000AA);
+        cn.put("dark_green", 0x00AA00);
+        cn.put("dark_aqua", 0x00AAAA);
+        cn.put("dark_red", 0xAA0000);
+        cn.put("dark_purple", 0xAA00AA);
+        cn.put("gold", 0xFFAA00);
+        cn.put("gray", 0xAAAAAA);
+        cn.put("dark_gray", 0x555555);
+        cn.put("blue", 0x5555FF);
+        cn.put("green", 0x55FF55);
+        cn.put("aqua", 0x55FFFF);
+        cn.put("red", 0xFF5555);
+        cn.put("light_purple", 0xFF55FF);
+        cn.put("yellow", 0xFFFF55);
+        cn.put("white", 0xFFFFFF);
+        cn.put("pink", 0xFFAEB9);
+
         var c = MOB_COLORS;
         c.put(Identifier.withDefaultNamespace("slime"), 0x7ECB7E);
         c.put(Identifier.withDefaultNamespace("creeper"), 0x3B7A3B);

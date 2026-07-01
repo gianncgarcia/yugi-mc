@@ -17,12 +17,24 @@ public abstract class EntityMixin {
     private void onGetTeamColor(CallbackInfoReturnable<Integer> ci) {
         Entity self = (Entity) (Object) this;
 
+        Integer customColor = null;
+
+        if (self instanceof Player) {
+            customColor = YugiClient.outlinedPlayers.get(self.getName().getString());
+        } else {
+            customColor = YugiClient.outlinedEntities.get(self.getName().getString());
+        }
+
         boolean outlined = YugiClient.entityOutlineAll
                 || YugiClient.entityOutline
-                || (!(self instanceof Player) && YugiClient.outlinedEntities.contains(self.getName().getString()))
-                || (self instanceof Player && YugiClient.outlinedPlayers.contains(self.getName().getString()));
+                || customColor != null;
 
         if (!outlined) return;
+
+        if (customColor != null && customColor != -1) {
+            ci.setReturnValue(customColor);
+            return;
+        }
 
         if (self instanceof Player player) {
             var team = player.getTeam();

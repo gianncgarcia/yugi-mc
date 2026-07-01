@@ -21,13 +21,13 @@ public abstract class MinecraftMixin {
 
         if (!YugiClient.outlinedEntities.isEmpty()
                 && !(entity instanceof Player)
-                && YugiClient.outlinedEntities.contains(entity.getName().getString())) {
+                && YugiClient.outlinedEntities.containsKey(entity.getName().getString())) {
             ci.setReturnValue(true);
         }
 
         if (!YugiClient.outlinedPlayers.isEmpty()
                 && entity instanceof Player
-                && YugiClient.outlinedPlayers.contains(entity.getName().getString())) {
+                && YugiClient.outlinedPlayers.containsKey(entity.getName().getString())) {
             ci.setReturnValue(true);
         }
     }

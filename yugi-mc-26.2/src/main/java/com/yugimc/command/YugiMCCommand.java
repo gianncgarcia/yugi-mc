@@ -12,6 +12,7 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.client.Minecraft;
@@ -29,47 +30,87 @@ public class YugiMCCommand {
                 .then(ClientCommands.literal("on").executes(ctx -> {
                     YugiClient.entityOutlineAll = true;
                     YugiClient.outlinedEntities.clear();
+                    YugiClient.outlinedPlayers.clear();
                     ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rAll Entity Outline Enabled"));
                     return 1;
                 }))
                 .then(ClientCommands.literal("off").executes(ctx -> {
                     YugiClient.entityOutlineAll = false;
                     YugiClient.outlinedEntities.clear();
+                    YugiClient.outlinedPlayers.clear();
                     ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rAll Entity Outline Disabled"));
                     return 1;
                 }))
                 .then(ClientCommands.literal("player")
-                    .then(ClientCommands.argument("playername", StringArgumentType.greedyString())
+                    .then(ClientCommands.argument("playername", StringArgumentType.word())
                         .suggests(YugiMCCommand::suggestPlayerNames)
                         .executes(ctx -> {
                             String playerName = StringArgumentType.getString(ctx, "playername");
-                            if (YugiClient.outlinedPlayers.contains(playerName)) {
+                            if (YugiClient.outlinedPlayers.containsKey(playerName)) {
                                 YugiClient.outlinedPlayers.remove(playerName);
                                 ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rOutline removed from " + playerName));
                             } else {
-                                YugiClient.outlinedPlayers.add(playerName);
+                                YugiClient.outlinedPlayers.put(playerName, -1);
                                 YugiClient.entityOutlineAll = false;
                                 ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rOutlined " + playerName));
                             }
                             return 1;
                         })
+                        .then(ClientCommands.argument("color", StringArgumentType.word())
+                            .suggests(YugiMCCommand::suggestColors)
+                            .executes(ctx -> {
+                                String playerName = StringArgumentType.getString(ctx, "playername");
+                                String colorName = StringArgumentType.getString(ctx, "color");
+                                Integer color = parseColor(colorName);
+                                if (color == null) {
+                                    ctx.getSource().sendFeedback(Component.literal("§cUnknown color: " + colorName));
+                                    return 0;
+                                }
+                                if (YugiClient.outlinedPlayers.containsKey(playerName)) {
+                                    YugiClient.outlinedPlayers.remove(playerName);
+                                }
+                                YugiClient.outlinedPlayers.put(playerName, color);
+                                YugiClient.entityOutlineAll = false;
+                                ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rOutlined " + playerName + " (" + colorName + ")"));
+                                return 1;
+                            })
+                        )
                     )
                 )
                 .then(ClientCommands.literal("entity")
-                    .then(ClientCommands.argument("entityname", StringArgumentType.greedyString())
+                    .then(ClientCommands.argument("entityname", StringArgumentType.word())
                         .suggests(YugiMCCommand::suggestEntityNames)
                         .executes(ctx -> {
                             String entityName = StringArgumentType.getString(ctx, "entityname");
-                            if (YugiClient.outlinedEntities.contains(entityName)) {
+                            if (YugiClient.outlinedEntities.containsKey(entityName)) {
                                 YugiClient.outlinedEntities.remove(entityName);
                                 ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rOutline removed from " + entityName));
                             } else {
-                                YugiClient.outlinedEntities.add(entityName);
+                                YugiClient.outlinedEntities.put(entityName, -1);
                                 YugiClient.entityOutlineAll = false;
                                 ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rOutlined " + entityName));
                             }
                             return 1;
                         })
+                        .then(ClientCommands.argument("color", StringArgumentType.word())
+                            .suggests(YugiMCCommand::suggestColors)
+                            .executes(ctx -> {
+                                String entityName = StringArgumentType.getString(ctx, "entityname");
+                                String colorName = StringArgumentType.getString(ctx, "color");
+                                Integer color = parseColor(colorName);
+                                if (color == null) {
+                                    ctx.getSource().sendFeedback(Component.literal("§cUnknown color: " + colorName));
+                                    return 0;
+                                }
+                                if (YugiClient.outlinedEntities.containsKey(entityName)) {
+                                    YugiClient.outlinedEntities.remove(entityName);
+                                }
+                                YugiClient.outlinedEntities.put(entityName, color);
+                                YugiClient.entityOutlineAll = false;
+                                ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rOutlined " + entityName + " (" + colorName + ")"));
+                                return 1;
+                            })
+                        )
                     )
                 )
                 .then(ClientCommands.literal("list")
@@ -88,14 +129,13 @@ public class YugiMCCommand {
                 String[] parts = serverData.ip.split(":");
                 String host = parts[0];
                 String port = parts.length > 1 ? parts[1] : "25565";
-                ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rHost: ")
-                        .append(Component.literal(host).withStyle(Style.EMPTY
-                                .withUnderlined(true)
-                                .withClickEvent(new ClickEvent.CopyToClipboard(host)))));
-                ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rPort: ")
-                        .append(Component.literal(port).withStyle(Style.EMPTY
-                                .withUnderlined(true)
-                                .withClickEvent(new ClickEvent.CopyToClipboard(port)))));
+                String address = host + ":" + port;
+                var hover = Component.literal("§7Click to copy");
+                ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §r")
+                        .append(Component.literal(address)
+                                .withStyle(Style.EMPTY
+                                        .withClickEvent(new ClickEvent.CopyToClipboard(address))
+                                        .withHoverEvent(new HoverEvent.ShowText(hover)))));
                 CompletableFuture.supplyAsync(() -> {
                     try {
                         return InetAddress.getByName(host).getHostAddress();
@@ -105,10 +145,12 @@ public class YugiMCCommand {
                 }).thenAcceptAsync(resolved -> {
                     if (resolved != null) {
                         var src = ctx.getSource();
-                        src.sendFeedback(Component.literal("§9[Yugi+] §rIP: ")
-                                .append(Component.literal(resolved).withStyle(Style.EMPTY
-                                        .withUnderlined(true)
-                                        .withClickEvent(new ClickEvent.CopyToClipboard(resolved)))));
+                        String resolvedAddress = resolved + ":" + port;
+                        src.sendFeedback(Component.literal("§9[Yugi+] §r")
+                                .append(Component.literal(resolvedAddress)
+                                                .withStyle(Style.EMPTY
+                                                        .withClickEvent(new ClickEvent.CopyToClipboard(resolvedAddress))
+                                                        .withHoverEvent(new HoverEvent.ShowText(hover)))));
                     }
                 }, Minecraft.getInstance());
                 return 1;
@@ -142,5 +184,22 @@ public class YugiMCCommand {
             return SharedSuggestionProvider.suggest(names, builder);
         }
         return builder.buildFuture();
+    }
+
+    private static Integer parseColor(String input) {
+        Integer named = YugiClient.COLOR_NAMES.get(input.toLowerCase());
+        if (named != null) return named;
+        if (input.startsWith("#")) {
+            try {
+                return Integer.parseInt(input.substring(1), 16);
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }
+        return null;
+    }
+
+    private static CompletableFuture<Suggestions> suggestColors(CommandContext<FabricClientCommandSource> ctx, SuggestionsBuilder builder) {
+        return SharedSuggestionProvider.suggest(YugiClient.COLOR_NAMES.keySet(), builder);
     }
 }
