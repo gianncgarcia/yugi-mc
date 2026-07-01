@@ -130,9 +130,17 @@ public class YugiMCCommand {
                         return 1;
                     })
                 )
+                .then(ClientCommands.literal("randomize").executes(ctx -> {
+                    YugiClient.fakelagRandomize = !YugiClient.fakelagRandomize;
+                    ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rFakeLag randomization " +
+                        (YugiClient.fakelagRandomize ? "§aOn" : "§cOff")));
+                    return 1;
+                }))
                 .executes(ctx -> {
-                    ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rCurrent FakeLag delay: " + YugiClient.fakelagDelay + "ms"));
+                    ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rCurrent FakeLag delay: " + YugiClient.fakelagDelay + "ms (Randomization: " +
+                        (YugiClient.fakelagRandomize ? "§aOn" : "§cOff") + "§r)"));
                     ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rUsage: /yugimc fakelag <delay(0-5000)>"));
+                    ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rUsage: /yugimc fakelag randomize"));
                     return 1;
                 })
             )

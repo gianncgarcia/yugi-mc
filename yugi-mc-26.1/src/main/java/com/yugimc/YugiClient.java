@@ -35,6 +35,7 @@ public enum YugiClient {
     public static boolean isFlushing = false;
     public static long fakelagDelay = 100;
     public static long lastFlushTime = 0;
+    public static boolean fakelagRandomize = false;
     public static final ArrayList<Packet<?>> packetQueue = new ArrayList<>();
     public static java.util.HashMap<String, Integer> outlinedEntities = new java.util.HashMap<>();
     public static java.util.HashMap<String, Integer> outlinedPlayers = new java.util.HashMap<>();
@@ -239,7 +240,11 @@ public enum YugiClient {
                 long now = System.currentTimeMillis();
                 if (now - lastFlushTime >= fakelagDelay) {
                     PacketUtil.flushPackets();
-                    lastFlushTime = now;
+                    if (fakelagRandomize) {
+                        lastFlushTime = now + (long)((Math.random() - 0.5) * fakelagDelay * 0.8);
+                    } else {
+                        lastFlushTime = now;
+                    }
                 }
             }
         });
@@ -252,6 +257,7 @@ public enum YugiClient {
             entityOutlineAll = false;
             fakeLagEnabled = false;
             fakelagDelay = 100;
+            fakelagRandomize = false;
             packetQueue.clear();
             isFlushing = false;
         }));
