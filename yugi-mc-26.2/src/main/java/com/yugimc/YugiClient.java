@@ -29,6 +29,7 @@ public enum YugiClient {
     public static boolean nametagSneak = true;
     public static boolean noMiningCooldown = true;
     public static java.util.HashSet<String> outlinedEntities = new java.util.HashSet<>();
+    public static java.util.HashSet<String> outlinedPlayers = new java.util.HashSet<>();
     public static final java.util.Map<Identifier, Integer> MOB_COLORS = new java.util.HashMap<>();
 
     static {
@@ -197,6 +198,7 @@ public enum YugiClient {
 
         ClientPlayConnectionEvents.DISCONNECT.register(((listener, client1) -> {
             outlinedEntities.clear();
+            outlinedPlayers.clear();
             entityOutlineAll = false;
         }));
     }

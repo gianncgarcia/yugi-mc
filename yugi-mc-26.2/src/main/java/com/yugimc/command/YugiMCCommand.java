@@ -43,11 +43,11 @@ public class YugiMCCommand {
                         .suggests(YugiMCCommand::suggestPlayerNames)
                         .executes(ctx -> {
                             String playerName = StringArgumentType.getString(ctx, "playername");
-                            if (YugiClient.outlinedEntities.contains(playerName)) {
-                                YugiClient.outlinedEntities.remove(playerName);
+                            if (YugiClient.outlinedPlayers.contains(playerName)) {
+                                YugiClient.outlinedPlayers.remove(playerName);
                                 ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rOutline removed from " + playerName));
                             } else {
-                                YugiClient.outlinedEntities.add(playerName);
+                                YugiClient.outlinedPlayers.add(playerName);
                                 YugiClient.entityOutlineAll = false;
                                 ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rOutlined " + playerName));
                             }
@@ -135,7 +135,9 @@ public class YugiMCCommand {
         if (level != null) {
             List<String> names = new ArrayList<>();
             for (var entity : level.entitiesForRendering()) {
-                names.add(entity.getName().getString());
+                if (!(entity instanceof Player)) {
+                    names.add(entity.getName().getString());
+                }
             }
             return SharedSuggestionProvider.suggest(names, builder);
         }

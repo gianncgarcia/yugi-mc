@@ -4,6 +4,7 @@ import com.yugimc.YugiClient;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,9 +19,21 @@ public abstract class EntityMixin {
 
         boolean outlined = YugiClient.entityOutlineAll
                 || YugiClient.entityOutline
-                || YugiClient.outlinedEntities.contains(self.getName().getString());
+                || (!(self instanceof Player) && YugiClient.outlinedEntities.contains(self.getName().getString()))
+                || (self instanceof Player && YugiClient.outlinedPlayers.contains(self.getName().getString()));
 
         if (!outlined) return;
+
+        if (self instanceof Player player) {
+            var team = player.getTeam();
+            if (team != null) {
+                var colorOpt = team.getColor();
+                if (colorOpt.isPresent()) {
+                    ci.setReturnValue(colorOpt.get().rgb());
+                    return;
+                }
+            }
+        }
 
         Identifier id = EntityType.getKey(self.getType());
         Integer custom = YugiClient.MOB_COLORS.get(id);
