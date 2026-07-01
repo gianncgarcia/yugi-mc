@@ -1,6 +1,7 @@
 package com.yugimc.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
@@ -119,6 +120,21 @@ public class YugiMCCommand {
                         return 1;
                     })
                 )
+            )
+            .then(ClientCommands.literal("fakelag")
+                .then(ClientCommands.argument("delay", IntegerArgumentType.integer(0, 5000))
+                    .executes(ctx -> {
+                        int delay = IntegerArgumentType.getInteger(ctx, "delay");
+                        YugiClient.fakelagDelay = delay;
+                        ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rFakeLag delay set to " + delay + "ms"));
+                        return 1;
+                    })
+                )
+                .executes(ctx -> {
+                    ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rCurrent FakeLag delay: " + YugiClient.fakelagDelay + "ms"));
+                    ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rUsage: /yugimc fakelag <delay(0-5000)>"));
+                    return 1;
+                })
             )
             .then(ClientCommands.literal("ip").executes(ctx -> {
                 var serverData = Minecraft.getInstance().getCurrentServer();

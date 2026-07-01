@@ -1,6 +1,7 @@
 package com.yugimc;
 
 import com.yugimc.util.ModCommandRegister;
+import com.yugimc.util.PacketUtil;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
@@ -12,8 +13,10 @@ import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import net.minecraft.network.protocol.Packet;
 
 public enum YugiClient {
     cliente;
@@ -28,6 +31,11 @@ public enum YugiClient {
     public static boolean entityOutlineAll = false;
     public static boolean nametagSneak = true;
     public static boolean noMiningCooldown = true;
+    public static boolean fakeLagEnabled = false;
+    public static boolean isFlushing = false;
+    public static long fakelagDelay = 500;
+    public static long lastFlushTime = 0;
+    public static final ArrayList<Packet<?>> packetQueue = new ArrayList<>();
     public static java.util.HashMap<String, Integer> outlinedEntities = new java.util.HashMap<>();
     public static java.util.HashMap<String, Integer> outlinedPlayers = new java.util.HashMap<>();
     public static final java.util.Map<Identifier, Integer> MOB_COLORS = new java.util.HashMap<>();
@@ -161,6 +169,9 @@ public enum YugiClient {
         var keyNoMiningCooldown = KeyMappingHelper.registerKeyMapping(new KeyMapping("No Mining Cooldown",
                 GLFW.GLFW_KEY_UNKNOWN,
                 YUGI_CATEGORY));
+        var keyFakeLag = KeyMappingHelper.registerKeyMapping(new KeyMapping("FakeLag",
+                GLFW.GLFW_KEY_B,
+                YUGI_CATEGORY));
 
         ClientTickEvents.END_CLIENT_TICK.register(tickClient -> {
             if (client.player == null) return;
@@ -212,6 +223,25 @@ public enum YugiClient {
                 client.player.sendSystemMessage(Component.literal(
                     noMiningCooldown ? "§9[Yugi+] §rEnabled No Mining Cooldown" : "§9[Yugi+] §rDisabled No Mining Cooldown"));
             }
+
+            if (keyFakeLag.consumeClick()) {
+                fakeLagEnabled = !fakeLagEnabled;
+                if (!fakeLagEnabled) {
+                    PacketUtil.flushPackets();
+                } else {
+                    lastFlushTime = System.currentTimeMillis();
+                }
+                client.player.sendSystemMessage(Component.literal(
+                    fakeLagEnabled ? "§9[Yugi+] §rFakeLag On" : "§9[Yugi+] §rFakeLag Off"));
+            }
+
+            if (fakeLagEnabled) {
+                long now = System.currentTimeMillis();
+                if (now - lastFlushTime >= fakelagDelay) {
+                    PacketUtil.flushPackets();
+                    lastFlushTime = now;
+                }
+            }
         });
 
         ModCommandRegister.registerCommands();
@@ -220,6 +250,10 @@ public enum YugiClient {
             outlinedEntities.clear();
             outlinedPlayers.clear();
             entityOutlineAll = false;
+            fakeLagEnabled = false;
+            fakelagDelay = 100;
+            packetQueue.clear();
+            isFlushing = false;
         }));
     }
 }

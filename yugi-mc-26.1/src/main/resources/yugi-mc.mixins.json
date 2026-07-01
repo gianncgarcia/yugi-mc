@@ -12,7 +12,8 @@
         "LocalPlayerMixin",
         "MinecraftMixin",
         "MultiPlayerGameModeMixin",
-        "LivingEntityMixin"
+        "LivingEntityMixin",
+        "ClientConnectionMixin"
     ],
     "injectors": {
         "defaultRequire": 1
