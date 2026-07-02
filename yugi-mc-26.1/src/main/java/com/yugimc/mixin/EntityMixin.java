@@ -23,6 +23,9 @@ public abstract class EntityMixin {
             customColor = YugiClient.outlinedPlayers.get(self.getName().getString());
         } else {
             customColor = YugiClient.outlinedEntities.get(self.getName().getString());
+            if (customColor == null) {
+                customColor = YugiClient.outlinedEntities.get(EntityType.getKey(self.getType()).getPath());
+            }
         }
 
         boolean outlined = YugiClient.entityOutlineAll

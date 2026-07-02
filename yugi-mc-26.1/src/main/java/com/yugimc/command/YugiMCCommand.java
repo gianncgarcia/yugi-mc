@@ -15,6 +15,7 @@ import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.client.Minecraft;
 
@@ -215,6 +216,7 @@ public class YugiMCCommand {
             for (var entity : level.entitiesForRendering()) {
                 if (!(entity instanceof Player)) {
                     names.add(entity.getName().getString());
+                    names.add(EntityType.getKey(entity.getType()).getPath());
                 }
             }
             return SharedSuggestionProvider.suggest(names, builder);
