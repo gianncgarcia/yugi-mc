@@ -87,23 +87,23 @@ public enum YugiClient {
             if (eoo.wasPressed()) {
                 if (outlineON) {
                     outlineON = false;
-                    client.player.sendMessage(Text.of("§9[Yugi+] §rDisabled Entity Outlining"), false);
+                    client.player.sendMessage(Text.of("§a[Yugi+] §rDisabled Entity Outlining"), false);
                 }
                 else {
                     outlineON = true;
                     outliningEntities = !outliningEntities;
-                    client.player.sendMessage(Text.of("§9[Yugi+] §rEnabled Entity Outlining"), false);
+                    client.player.sendMessage(Text.of("§a[Yugi+] §rEnabled Entity Outlining"), false);
                 }
             }
             //Nametag Visible when Sneaking
             if (NametagSneak.wasPressed()) {
                 if (NTSneak) {
                     NTSneak = false;
-                    client.player.sendMessage(Text.of("§9[Yugi+] §rNametag Sneak Visibility On"), false);
+                    client.player.sendMessage(Text.of("§a[Yugi+] §rNametag Sneak Visibility On"), false);
                 }
                 else {
                     NTSneak = true;
-                    client.player.sendMessage(Text.of("§9[Yugi+] §rNametag Sneak Visibility On"), false);
+                    client.player.sendMessage(Text.of("§a[Yugi+] §rNametag Sneak Visibility On"), false);
                 }
             }
             //Entity Outline GUI
@@ -114,34 +114,34 @@ public enum YugiClient {
             if (sf.wasPressed()) {
                 if (vanillaspoof) {
                     vanillaspoof = false;
-                    client.player.sendMessage(Text.of("§9[Yugi+] §rDisabled Vanilla Spoofing"), false);
+                    client.player.sendMessage(Text.of("§a[Yugi+] §rDisabled Vanilla Spoofing"), false);
 
                 }
                 else  {
                     vanillaspoof = true;
-                    client.player.sendMessage(Text.of("§9[Yugi+] §rEnabled Vanilla Spoofing"), false);
+                    client.player.sendMessage(Text.of("§a[Yugi+] §rEnabled Vanilla Spoofing"), false);
                 }
             }
             // Hurtcam shake
             if (k.wasPressed()) {
                 if (hstoggledOn) {
                     hstoggledOn = false;
-                    client.player.sendMessage(Text.of("§9[Yugi+] §rDisabled NoHurtCam"), false);
+                    client.player.sendMessage(Text.of("§a[Yugi+] §rDisabled NoHurtCam"), false);
                 }
                 else {
                     hstoggledOn = true;
-                    client.player.sendMessage(Text.of("§9[Yugi+] §rEnabled NoHurtCam"), false);
+                    client.player.sendMessage(Text.of("§a[Yugi+] §rEnabled NoHurtCam"), false);
                 }
             }
             // Anti-Blind
             if (kk.wasPressed()) {
                 if (abtoggleOn) {
                     abtoggleOn = false;
-                    client.player.sendMessage(Text.of("§9[Yugi+] §rDisabled Anti-Blind"), false);
+                    client.player.sendMessage(Text.of("§a[Yugi+] §rDisabled Anti-Blind"), false);
                 }
                 else {
                     abtoggleOn = true;
-                    client.player.sendMessage(Text.of("§9[Yugi+] §rEnabled Anti-Blind"), false);
+                    client.player.sendMessage(Text.of("§a[Yugi+] §rEnabled Anti-Blind"), false);
                 }
 
             }
@@ -149,22 +149,22 @@ public enum YugiClient {
             if (kg.wasPressed()) {
                 if (zoomOn) {
                     zoomOn = false;
-                    client.player.sendMessage(Text.of("§9[Yugi+] §rUnzoomed"), false);
+                    client.player.sendMessage(Text.of("§a[Yugi+] §rUnzoomed"), false);
                 }
                 else {
                     zoomOn = true;
-                    client.player.sendMessage(Text.of("§9[Yugi+] §rZooming"), false);
+                    client.player.sendMessage(Text.of("§a[Yugi+] §rZooming"), false);
                 }
             }
             // Portal Enable Gui
             if (pg.wasPressed()) {
                 if (pgg) {
                     pgg = false;
-                    client.player.sendMessage(Text.of("§9[Yugi+] §rDisabled Portal Gui"), false);
+                    client.player.sendMessage(Text.of("§a[Yugi+] §rDisabled Portal Gui"), false);
                 }
                 else {
                     pgg = true;
-                    client.player.sendMessage(Text.of("§9[Yugi+] §rEnabled Portal Gui"), false);
+                    client.player.sendMessage(Text.of("§a[Yugi+] §rEnabled Portal Gui"), false);
                 }
             }
         });

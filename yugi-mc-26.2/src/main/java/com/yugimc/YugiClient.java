@@ -37,6 +37,10 @@ public enum YugiClient {
     public static long lastFlushTime = 0;
     public static boolean fakelagRandomize = false;
     public static final ArrayList<Packet<?>> packetQueue = new ArrayList<>();
+    public static boolean pickupMagnet = false;
+    public static boolean fastPickup = true;
+    public static boolean hudVisible = true;
+    public static long lastHudToggleTime = 0;
     public static java.util.HashMap<String, Integer> outlinedEntities = new java.util.HashMap<>();
     public static java.util.HashMap<String, Integer> outlinedPlayers = new java.util.HashMap<>();
     public static final java.util.Map<Identifier, Integer> MOB_COLORS = new java.util.HashMap<>();
@@ -171,7 +175,13 @@ public enum YugiClient {
                 GLFW.GLFW_KEY_UNKNOWN,
                 YUGI_CATEGORY));
         var keyFakeLag = KeyMappingHelper.registerKeyMapping(new KeyMapping("FakeLag",
-                GLFW.GLFW_KEY_B,
+                GLFW.GLFW_KEY_UNKNOWN,
+                YUGI_CATEGORY));
+        var keyPickupMagnet = KeyMappingHelper.registerKeyMapping(new KeyMapping("Pickup Magnet",
+                GLFW.GLFW_KEY_UNKNOWN,
+                YUGI_CATEGORY));
+        var keyFastPickup = KeyMappingHelper.registerKeyMapping(new KeyMapping("Fast Pickup",
+                GLFW.GLFW_KEY_UNKNOWN,
                 YUGI_CATEGORY));
 
         ClientTickEvents.END_CLIENT_TICK.register(tickClient -> {
@@ -180,49 +190,49 @@ public enum YugiClient {
             if (keyEntityOutline.consumeClick()) {
                 entityOutline = !entityOutline;
                 client.player.sendSystemMessage(Component.literal(
-                    entityOutline ? "§9[Yugi+] §rEnabled Entity Outlining" : "§9[Yugi+] §rDisabled Entity Outlining"));
+                    entityOutline ? "§a[Yugi+] §rEnabled Entity Outlining" : "§a[Yugi+] §rDisabled Entity Outlining"));
             }
 
             if (keyNametagSneak.consumeClick()) {
                 nametagSneak = !nametagSneak;
                 client.player.sendSystemMessage(Component.literal(
-                    nametagSneak ? "§9[Yugi+] §rNametag Sneak Visibility On" : "§9[Yugi+] §rNametag Sneak Visibility Off"));
+                    nametagSneak ? "§a[Yugi+] §rNametag Sneak Visibility On" : "§a[Yugi+] §rNametag Sneak Visibility Off"));
             }
 
             if (keyVanillaSpoof.consumeClick()) {
                 vanillaSpoof = !vanillaSpoof;
                 client.player.sendSystemMessage(Component.literal(
-                    vanillaSpoof ? "§9[Yugi+] §rEnabled Vanilla Spoofing" : "§9[Yugi+] §rDisabled Vanilla Spoofing"));
+                    vanillaSpoof ? "§a[Yugi+] §rEnabled Vanilla Spoofing" : "§a[Yugi+] §rDisabled Vanilla Spoofing"));
             }
 
             if (keyAntiBlind.consumeClick()) {
                 antiBlind = !antiBlind;
                 client.player.sendSystemMessage(Component.literal(
-                    antiBlind ? "§9[Yugi+] §rEnabled Anti-Blind" : "§9[Yugi+] §rDisabled Anti-Blind"));
+                    antiBlind ? "§a[Yugi+] §rEnabled Anti-Blind" : "§a[Yugi+] §rDisabled Anti-Blind"));
             }
 
             if (keyZoom.consumeClick()) {
                 zoomEnabled = !zoomEnabled;
                 client.player.sendSystemMessage(Component.literal(
-                    zoomEnabled ? "§9[Yugi+] §rZooming" : "§9[Yugi+] §rUnzoomed"));
+                    zoomEnabled ? "§a[Yugi+] §rZooming" : "§a[Yugi+] §rUnzoomed"));
             }
 
             if (keyHurtShake.consumeClick()) {
                 noHurtCam = !noHurtCam;
                 client.player.sendSystemMessage(Component.literal(
-                    noHurtCam ? "§9[Yugi+] §rEnabled NoHurtCam" : "§9[Yugi+] §rDisabled NoHurtCam"));
+                    noHurtCam ? "§a[Yugi+] §rEnabled NoHurtCam" : "§a[Yugi+] §rDisabled NoHurtCam"));
             }
 
             if (keyPortalGui.consumeClick()) {
                 portalGuiEnabled = !portalGuiEnabled;
                 client.player.sendSystemMessage(Component.literal(
-                    portalGuiEnabled ? "§9[Yugi+] §rEnabled Portal Gui" : "§9[Yugi+] §rDisabled Portal Gui"));
+                    portalGuiEnabled ? "§a[Yugi+] §rEnabled Portal Gui" : "§a[Yugi+] §rDisabled Portal Gui"));
             }
 
             if (keyNoMiningCooldown.consumeClick()) {
                 noMiningCooldown = !noMiningCooldown;
                 client.player.sendSystemMessage(Component.literal(
-                    noMiningCooldown ? "§9[Yugi+] §rEnabled No Mining Cooldown" : "§9[Yugi+] §rDisabled No Mining Cooldown"));
+                    noMiningCooldown ? "§a[Yugi+] §rEnabled No Mining Cooldown" : "§a[Yugi+] §rDisabled No Mining Cooldown"));
             }
 
             if (keyFakeLag.consumeClick()) {
@@ -233,7 +243,30 @@ public enum YugiClient {
                     lastFlushTime = System.currentTimeMillis();
                 }
                 client.player.sendSystemMessage(Component.literal(
-                    fakeLagEnabled ? "§9[Yugi+] §rFakeLag On" : "§9[Yugi+] §rFakeLag Off"));
+                    fakeLagEnabled ? "§a[Yugi+] §rFakeLag On" : "§a[Yugi+] §rFakeLag Off"));
+            }
+
+            if (keyPickupMagnet.consumeClick()) {
+                pickupMagnet = !pickupMagnet;
+                client.player.sendSystemMessage(Component.literal(
+                    pickupMagnet ? "§a[Yugi+] §rPickup Magnet Enabled" : "§a[Yugi+] §rPickup Magnet Disabled"));
+            }
+
+            if (keyFastPickup.consumeClick()) {
+                fastPickup = !fastPickup;
+                client.player.sendSystemMessage(Component.literal(
+                    fastPickup ? "§a[Yugi+] §rFast Pickup Enabled" : "§a[Yugi+] §rFast Pickup Disabled"));
+            }
+
+            if (GLFW.glfwGetKey(client.getWindow().handle(), GLFW.GLFW_KEY_V) == GLFW.GLFW_PRESS
+                    && GLFW.glfwGetKey(client.getWindow().handle(), GLFW.GLFW_KEY_B) == GLFW.GLFW_PRESS) {
+                long now = System.currentTimeMillis();
+                if (now - lastHudToggleTime > 500) {
+                    lastHudToggleTime = now;
+                    hudVisible = !hudVisible;
+                    client.player.sendSystemMessage(Component.literal(
+                        hudVisible ? "§a[Yugi+] §rHUD Visible" : "§a[Yugi+] §rHUD Hidden"));
+                }
             }
 
             if (fakeLagEnabled) {

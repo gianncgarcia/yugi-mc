@@ -32,14 +32,14 @@ public class YugiMCCommand {
                     YugiClient.entityOutlineAll = true;
                     YugiClient.outlinedEntities.clear();
                     YugiClient.outlinedPlayers.clear();
-                    ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rAll Entity Outline Enabled"));
+                    ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rAll Entity Outline Enabled"));
                     return 1;
                 }))
                 .then(ClientCommands.literal("off").executes(ctx -> {
                     YugiClient.entityOutlineAll = false;
                     YugiClient.outlinedEntities.clear();
                     YugiClient.outlinedPlayers.clear();
-                    ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rAll Entity Outline Disabled"));
+                    ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rAll Entity Outline Disabled"));
                     return 1;
                 }))
                 .then(ClientCommands.literal("player")
@@ -49,11 +49,11 @@ public class YugiMCCommand {
                             String playerName = StringArgumentType.getString(ctx, "playername");
                             if (YugiClient.outlinedPlayers.containsKey(playerName)) {
                                 YugiClient.outlinedPlayers.remove(playerName);
-                                ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rOutline removed from " + playerName));
+                                ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rOutline removed from " + playerName));
                             } else {
                                 YugiClient.outlinedPlayers.put(playerName, -1);
                                 YugiClient.entityOutlineAll = false;
-                                ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rOutlined " + playerName));
+                                ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rOutlined " + playerName));
                             }
                             return 1;
                         })
@@ -72,7 +72,7 @@ public class YugiMCCommand {
                                 }
                                 YugiClient.outlinedPlayers.put(playerName, color);
                                 YugiClient.entityOutlineAll = false;
-                                ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rOutlined " + playerName + " (" + colorName + ")"));
+                                ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rOutlined " + playerName + " (" + colorName + ")"));
                                 return 1;
                             })
                         )
@@ -85,11 +85,11 @@ public class YugiMCCommand {
                             String entityName = StringArgumentType.getString(ctx, "entityname");
                             if (YugiClient.outlinedEntities.containsKey(entityName)) {
                                 YugiClient.outlinedEntities.remove(entityName);
-                                ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rOutline removed from " + entityName));
+                                ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rOutline removed from " + entityName));
                             } else {
                                 YugiClient.outlinedEntities.put(entityName, -1);
                                 YugiClient.entityOutlineAll = false;
-                                ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rOutlined " + entityName));
+                                ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rOutlined " + entityName));
                             }
                             return 1;
                         })
@@ -108,7 +108,7 @@ public class YugiMCCommand {
                                 }
                                 YugiClient.outlinedEntities.put(entityName, color);
                                 YugiClient.entityOutlineAll = false;
-                                ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rOutlined " + entityName + " (" + colorName + ")"));
+                                ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rOutlined " + entityName + " (" + colorName + ")"));
                                 return 1;
                             })
                         )
@@ -116,7 +116,7 @@ public class YugiMCCommand {
                 )
                 .then(ClientCommands.literal("list")
                     .executes(ctx -> {
-                        ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rUse /yugimc outline on, /yugimc outline off, /yugimc outline player <name>, or /yugimc outline entity <name>"));
+                        ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rUse /yugimc outline on, /yugimc outline off, /yugimc outline player <name>, or /yugimc outline entity <name>"));
                         return 1;
                     })
                 )
@@ -126,21 +126,21 @@ public class YugiMCCommand {
                     .executes(ctx -> {
                         int delay = IntegerArgumentType.getInteger(ctx, "delay");
                         YugiClient.fakelagDelay = delay;
-                        ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rFakeLag delay set to " + delay + "ms"));
+                        ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rFakeLag delay set to " + delay + "ms"));
                         return 1;
                     })
                 )
                 .then(ClientCommands.literal("randomize").executes(ctx -> {
                     YugiClient.fakelagRandomize = !YugiClient.fakelagRandomize;
-                    ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rFakeLag randomization " +
+                    ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rFakeLag randomization " +
                         (YugiClient.fakelagRandomize ? "§aOn" : "§cOff")));
                     return 1;
                 }))
                 .executes(ctx -> {
-                    ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rCurrent FakeLag delay: " + YugiClient.fakelagDelay + "ms (Randomization: " +
+                    ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rCurrent FakeLag delay: " + YugiClient.fakelagDelay + "ms (Randomization: " +
                         (YugiClient.fakelagRandomize ? "§aOn" : "§cOff") + "§r)"));
-                    ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rUsage: /yugimc fakelag <delay(0-5000)>"));
-                    ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §rUsage: /yugimc fakelag randomize"));
+                    ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rUsage: /yugimc fakelag <delay(0-5000)>"));
+                    ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rUsage: /yugimc fakelag randomize"));
                     return 1;
                 })
             )
@@ -155,7 +155,7 @@ public class YugiMCCommand {
                 String port = parts.length > 1 ? parts[1] : "25565";
                 String address = host + ":" + port;
                 var hover = Component.literal("§7Click to copy");
-                ctx.getSource().sendFeedback(Component.literal("§9[Yugi+] §r")
+                ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §r")
                         .append(Component.literal(address)
                                 .withStyle(Style.EMPTY
                                         .withClickEvent(new ClickEvent.CopyToClipboard(address))
@@ -170,7 +170,7 @@ public class YugiMCCommand {
                     if (resolved != null) {
                         var src = ctx.getSource();
                         String resolvedAddress = resolved + ":" + port;
-                        src.sendFeedback(Component.literal("§9[Yugi+] §r")
+                        src.sendFeedback(Component.literal("§a[Yugi+] §r")
                                 .append(Component.literal(resolvedAddress)
                                                 .withStyle(Style.EMPTY
                                                         .withClickEvent(new ClickEvent.CopyToClipboard(resolvedAddress))

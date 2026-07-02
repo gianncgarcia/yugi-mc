@@ -13,7 +13,9 @@
         "MinecraftMixin",
         "MultiPlayerGameModeMixin",
         "LivingEntityMixin",
-        "ClientConnectionMixin"
+        "ClientConnectionMixin",
+        "ItemEntityMixin",
+        "HudMixin"
     ],
     "injectors": {
         "defaultRequire": 1

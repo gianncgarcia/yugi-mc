@@ -14,7 +14,7 @@ public class outlinecom {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess) {
         dispatcher.register(ClientCommandManager.literal("outlineon").executes(ctx -> {
             YugiClient.outlineONN = true;
-            YugiClient.client.player.sendMessage(Text.of("§9[Yugi+] §rAll Entity Outline"), false);
+            YugiClient.client.player.sendMessage(Text.of("§a[Yugi+] §rAll Entity Outline"), false);
             return 1;
         }));
     }
