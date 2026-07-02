@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.Packet;
 
 public enum YugiClient {
@@ -43,6 +44,10 @@ public enum YugiClient {
     public static long lastHudToggleTime = 0;
     public static java.util.HashMap<String, Integer> outlinedEntities = new java.util.HashMap<>();
     public static java.util.HashMap<String, Integer> outlinedPlayers = new java.util.HashMap<>();
+    public static final java.util.Set<Identifier> outlinedBlockTypes = new java.util.HashSet<>();
+    public static final java.util.Set<net.minecraft.core.BlockPos> cachedBlockPositions = java.util.concurrent.ConcurrentHashMap.newKeySet();
+    public static long lastBlockScanTime = 0;
+    public static int blockScanRange = 48;
     public static final java.util.Map<Identifier, Integer> MOB_COLORS = new java.util.HashMap<>();
     public static final java.util.Map<String, Integer> COLOR_NAMES = new java.util.HashMap<>();
 
@@ -269,6 +274,35 @@ public enum YugiClient {
                 }
             }
 
+            if (!outlinedBlockTypes.isEmpty()) {
+                long now = System.currentTimeMillis();
+                if (now - lastBlockScanTime > 1000 || cachedBlockPositions.isEmpty()) {
+                    lastBlockScanTime = now;
+                    cachedBlockPositions.clear();
+                    var level = client.level;
+                    if (level != null) {
+                        var playerPos = client.player.blockPosition();
+                        int minX = playerPos.getX() - blockScanRange;
+                        int minY = Math.max(level.getMinY(), playerPos.getY() - 16);
+                        int minZ = playerPos.getZ() - blockScanRange;
+                        int maxX = playerPos.getX() + blockScanRange;
+                        int maxY = Math.min(level.getMaxY(), playerPos.getY() + 16);
+                        int maxZ = playerPos.getZ() + blockScanRange;
+                        for (int x = minX; x <= maxX; x++) {
+                            for (int y = minY; y <= maxY; y++) {
+                                for (int z = minZ; z <= maxZ; z++) {
+                                    var pos = new net.minecraft.core.BlockPos(x, y, z);
+                                    var state = level.getBlockState(pos);
+                                    if (outlinedBlockTypes.contains(BuiltInRegistries.BLOCK.getKey(state.getBlock()))) {
+                                        cachedBlockPositions.add(pos.immutable());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             if (fakeLagEnabled) {
                 long now = System.currentTimeMillis();
                 if (now - lastFlushTime >= fakelagDelay) {
@@ -287,6 +321,8 @@ public enum YugiClient {
         ClientPlayConnectionEvents.DISCONNECT.register(((listener, client1) -> {
             outlinedEntities.clear();
             outlinedPlayers.clear();
+            outlinedBlockTypes.clear();
+            cachedBlockPositions.clear();
             entityOutlineAll = false;
             fakeLagEnabled = false;
             fakelagDelay = 100;

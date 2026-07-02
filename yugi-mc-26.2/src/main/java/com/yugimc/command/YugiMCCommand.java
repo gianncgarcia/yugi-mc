@@ -17,11 +17,13 @@ import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import net.minecraft.resources.Identifier;
 
 public class YugiMCCommand {
 
@@ -114,9 +116,28 @@ public class YugiMCCommand {
                         )
                     )
                 )
+                .then(ClientCommands.literal("block")
+                    .then(ClientCommands.argument("blockname", StringArgumentType.word())
+                        .suggests(YugiMCCommand::suggestBlockNames)
+                        .executes(ctx -> {
+                            String blockName = StringArgumentType.getString(ctx, "blockname");
+                            var id = Identifier.withDefaultNamespace(blockName);
+                            if (YugiClient.outlinedBlockTypes.contains(id)) {
+                                YugiClient.outlinedBlockTypes.remove(id);
+                                YugiClient.cachedBlockPositions.clear();
+                                ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rBlock outline removed for " + blockName));
+                            } else {
+                                YugiClient.outlinedBlockTypes.add(id);
+                                YugiClient.cachedBlockPositions.clear();
+                                ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rOutlining " + blockName));
+                            }
+                            return 1;
+                        })
+                    )
+                )
                 .then(ClientCommands.literal("list")
                     .executes(ctx -> {
-                        ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rUse /yugimc outline on, /yugimc outline off, /yugimc outline player <name>, or /yugimc outline entity <name>"));
+                        ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rUse /yugimc outline on, /yugimc outline off, /yugimc outline player <name>, /yugimc outline entity <name>, or /yugimc outline block <name>"));
                         return 1;
                     })
                 )
@@ -208,6 +229,17 @@ public class YugiMCCommand {
             return SharedSuggestionProvider.suggest(names, builder);
         }
         return builder.buildFuture();
+    }
+
+    private static CompletableFuture<Suggestions> suggestBlockNames(CommandContext<FabricClientCommandSource> ctx, SuggestionsBuilder builder) {
+        List<String> names = new ArrayList<>();
+        for (var id : BuiltInRegistries.BLOCK.keySet()) {
+            String path = id.getPath();
+            if (!names.contains(path)) {
+                names.add(path);
+            }
+        }
+        return SharedSuggestionProvider.suggest(names, builder);
     }
 
     private static Integer parseColor(String input) {

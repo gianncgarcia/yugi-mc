@@ -15,7 +15,8 @@
         "LivingEntityMixin",
         "ClientConnectionMixin",
         "ItemEntityMixin",
-        "HudMixin"
+        "HudMixin",
+        "LevelRendererMixin"
     ],
     "injectors": {
         "defaultRequire": 1
