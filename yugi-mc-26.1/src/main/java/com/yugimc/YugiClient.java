@@ -39,7 +39,7 @@ public enum YugiClient {
     public static final ArrayList<Packet<?>> packetQueue = new ArrayList<>();
     public static boolean pickupMagnet = false;
     public static boolean fastPickup = true;
-    public static boolean hudVisible = true;
+    public static boolean hudVisible = false;
     public static long lastHudToggleTime = 0;
     public static java.util.HashMap<String, Integer> outlinedEntities = new java.util.HashMap<>();
     public static java.util.HashMap<String, Integer> outlinedPlayers = new java.util.HashMap<>();
