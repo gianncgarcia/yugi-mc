@@ -16,8 +16,7 @@
         "ClientConnectionMixin",
         "ItemEntityMixin",
         "HudMixin",
-        "LevelRendererMixin",
-        "RenderSectionRegionMixin"
+        "LevelRendererMixin"
     ],
     "injectors": {
         "defaultRequire": 1
