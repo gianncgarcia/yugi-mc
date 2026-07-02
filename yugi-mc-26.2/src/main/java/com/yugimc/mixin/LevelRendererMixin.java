@@ -19,8 +19,7 @@ public class LevelRendererMixin {
         if (YugiClient.cachedBlockPositions.isEmpty()) return;
 
         for (BlockPos pos : YugiClient.cachedBlockPositions) {
-            Gizmos.cuboid(pos, 0.05f, GizmoStyle.fill(0x15FFDD00));
-            Gizmos.cuboid(pos, GizmoStyle.strokeAndFill(0xFFFFDD00, 2.5f, 0x40FFDD00));
+            Gizmos.cuboid(pos, GizmoStyle.stroke(0xFFFFFFFF, 2.0f)).setAlwaysOnTop();
         }
     }
 }

@@ -41,6 +41,9 @@ public class YugiMCCommand {
                     YugiClient.entityOutlineAll = false;
                     YugiClient.outlinedEntities.clear();
                     YugiClient.outlinedPlayers.clear();
+                    YugiClient.outlinedBlockTypes.clear();
+                    YugiClient.outlinedBlocks.clear();
+                    YugiClient.cachedBlockPositions.clear();
                     ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rAll Entity Outline Disabled"));
                     return 1;
                 }))
@@ -124,10 +127,21 @@ public class YugiMCCommand {
                             var id = Identifier.withDefaultNamespace(blockName);
                             if (YugiClient.outlinedBlockTypes.contains(id)) {
                                 YugiClient.outlinedBlockTypes.remove(id);
+                                YugiClient.outlinedBlocks.clear();
+                                for (var oid : YugiClient.outlinedBlockTypes) {
+                                    var b = BuiltInRegistries.BLOCK.getValue(oid);
+                                    if (b != null) YugiClient.outlinedBlocks.add(b);
+                                }
                                 YugiClient.cachedBlockPositions.clear();
                                 ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rBlock outline removed for " + blockName));
                             } else {
+                                var block = BuiltInRegistries.BLOCK.getValue(id);
+                                if (block == null) {
+                                    ctx.getSource().sendFeedback(Component.literal("§cUnknown block: " + blockName));
+                                    return 0;
+                                }
                                 YugiClient.outlinedBlockTypes.add(id);
+                                YugiClient.outlinedBlocks.add(block);
                                 YugiClient.cachedBlockPositions.clear();
                                 ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rOutlining " + blockName));
                             }

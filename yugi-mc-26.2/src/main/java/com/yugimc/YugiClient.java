@@ -45,6 +45,7 @@ public enum YugiClient {
     public static java.util.HashMap<String, Integer> outlinedEntities = new java.util.HashMap<>();
     public static java.util.HashMap<String, Integer> outlinedPlayers = new java.util.HashMap<>();
     public static final java.util.Set<Identifier> outlinedBlockTypes = new java.util.HashSet<>();
+    public static final java.util.Set<net.minecraft.world.level.block.Block> outlinedBlocks = new java.util.HashSet<>();
     public static final java.util.Set<net.minecraft.core.BlockPos> cachedBlockPositions = java.util.concurrent.ConcurrentHashMap.newKeySet();
     public static long lastBlockScanTime = 0;
     public static int blockScanRange = 48;
@@ -276,25 +277,31 @@ public enum YugiClient {
 
             if (!outlinedBlockTypes.isEmpty()) {
                 long now = System.currentTimeMillis();
-                if (now - lastBlockScanTime > 1000 || cachedBlockPositions.isEmpty()) {
+                if (now - lastBlockScanTime > 1000) {
                     lastBlockScanTime = now;
                     cachedBlockPositions.clear();
                     var level = client.level;
                     if (level != null) {
                         var playerPos = client.player.blockPosition();
-                        int minX = playerPos.getX() - blockScanRange;
-                        int minY = Math.max(level.getMinY(), playerPos.getY() - 16);
-                        int minZ = playerPos.getZ() - blockScanRange;
-                        int maxX = playerPos.getX() + blockScanRange;
-                        int maxY = Math.min(level.getMaxY(), playerPos.getY() + 16);
-                        int maxZ = playerPos.getZ() + blockScanRange;
-                        for (int x = minX; x <= maxX; x++) {
-                            for (int y = minY; y <= maxY; y++) {
-                                for (int z = minZ; z <= maxZ; z++) {
-                                    var pos = new net.minecraft.core.BlockPos(x, y, z);
-                                    var state = level.getBlockState(pos);
-                                    if (outlinedBlockTypes.contains(BuiltInRegistries.BLOCK.getKey(state.getBlock()))) {
-                                        cachedBlockPositions.add(pos.immutable());
+                        int px = playerPos.getX();
+                        int pz = playerPos.getZ();
+                        int range = blockScanRange;
+                        var mutable = new net.minecraft.core.BlockPos.MutableBlockPos();
+                        for (int x = px - range; x <= px + range; x += 16) {
+                            for (int z = pz - range; z <= pz + range; z += 16) {
+                                if (!level.hasChunk(x >> 4, z >> 4)) continue;
+                                int cx = Math.min(x + 15, px + range);
+                                int cz = Math.min(z + 15, pz + range);
+                                for (int bx = x; bx <= cx; bx++) {
+                                    for (int bz = z; bz <= cz; bz++) {
+                                        int minY = Math.max(level.getMinY(), playerPos.getY() - 16);
+                                        int maxY = Math.min(level.getMaxY(), playerPos.getY() + 16);
+                                        for (int by = minY; by <= maxY; by++) {
+                                            var state = level.getBlockState(mutable.set(bx, by, bz));
+                                            if (outlinedBlocks.contains(state.getBlock())) {
+                                                cachedBlockPositions.add(mutable.immutable());
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -322,6 +329,7 @@ public enum YugiClient {
             outlinedEntities.clear();
             outlinedPlayers.clear();
             outlinedBlockTypes.clear();
+            outlinedBlocks.clear();
             cachedBlockPositions.clear();
             entityOutlineAll = false;
             fakeLagEnabled = false;
