@@ -18,9 +18,9 @@ public class LevelRendererMixin {
     private void onCollectGizmos(CallbackInfoReturnable<TemporaryCollection> cir) {
         if (YugiClient.cachedBlockPositions.isEmpty()) return;
 
-        int color = 0xFF55FF55;
         for (BlockPos pos : YugiClient.cachedBlockPositions) {
-            Gizmos.cuboid(pos, GizmoStyle.strokeAndFill(color, 2.0f, 0x30FF55FF));
+            Gizmos.cuboid(pos, 0.05f, GizmoStyle.fill(0x15FFDD00));
+            Gizmos.cuboid(pos, GizmoStyle.strokeAndFill(0xFFFFDD00, 2.5f, 0x40FFDD00));
         }
     }
 }

@@ -122,13 +122,22 @@ public class YugiMCCommand {
                         .executes(ctx -> {
                             String blockName = StringArgumentType.getString(ctx, "blockname");
                             var id = Identifier.withDefaultNamespace(blockName);
+                            var block = BuiltInRegistries.BLOCK.getValue(id);
+                            if (block == null) {
+                                ctx.getSource().sendFeedback(Component.literal("§cUnknown block: " + blockName));
+                                return 0;
+                            }
                             if (YugiClient.outlinedBlockTypes.contains(id)) {
                                 YugiClient.outlinedBlockTypes.remove(id);
+                                YugiClient.outlinedBlocks.remove(block);
                                 YugiClient.cachedBlockPositions.clear();
+                                YugiClient.invalidateChunkRenderer();
                                 ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rBlock outline removed for " + blockName));
                             } else {
                                 YugiClient.outlinedBlockTypes.add(id);
+                                YugiClient.outlinedBlocks.add(block);
                                 YugiClient.cachedBlockPositions.clear();
+                                YugiClient.invalidateChunkRenderer();
                                 ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rOutlining " + blockName));
                             }
                             return 1;

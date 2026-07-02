@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.Packet;
 
 public enum YugiClient {
@@ -42,9 +41,25 @@ public enum YugiClient {
     public static boolean fastPickup = true;
     public static boolean hudVisible = false;
     public static long lastHudToggleTime = 0;
+    public static boolean xrayEnabled = false;
+
+    public static void invalidateChunkRenderer() {
+        var mc = Minecraft.getInstance();
+        if (mc.levelRenderer != null && mc.level != null && mc.gameRenderer != null) {
+            try {
+                mc.levelRenderer.invalidateCompiledGeometry(
+                    mc.level,
+                    mc.options,
+                    mc.gameRenderer.mainCamera(),
+                    mc.getBlockColors()
+                );
+            } catch (Exception ignored) {}
+        }
+    }
     public static java.util.HashMap<String, Integer> outlinedEntities = new java.util.HashMap<>();
     public static java.util.HashMap<String, Integer> outlinedPlayers = new java.util.HashMap<>();
     public static final java.util.Set<Identifier> outlinedBlockTypes = new java.util.HashSet<>();
+    public static final java.util.Set<net.minecraft.world.level.block.Block> outlinedBlocks = new java.util.HashSet<>();
     public static final java.util.Set<net.minecraft.core.BlockPos> cachedBlockPositions = java.util.concurrent.ConcurrentHashMap.newKeySet();
     public static long lastBlockScanTime = 0;
     public static int blockScanRange = 48;
@@ -293,7 +308,7 @@ public enum YugiClient {
                                 for (int z = minZ; z <= maxZ; z++) {
                                     var pos = new net.minecraft.core.BlockPos(x, y, z);
                                     var state = level.getBlockState(pos);
-                                    if (outlinedBlockTypes.contains(BuiltInRegistries.BLOCK.getKey(state.getBlock()))) {
+                                    if (outlinedBlocks.contains(state.getBlock())) {
                                         cachedBlockPositions.add(pos.immutable());
                                     }
                                 }
