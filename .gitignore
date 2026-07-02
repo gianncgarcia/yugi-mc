@@ -32,6 +32,11 @@ bin/
 
 run/
 
+# decompiled class files
+
+net/
+**/net/
+
 # java
 
 hs_err_*.log
