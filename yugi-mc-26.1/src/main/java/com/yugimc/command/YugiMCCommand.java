@@ -43,6 +43,12 @@ public class YugiMCCommand {
                     return 1;
                 }))
                 .then(ClientCommands.literal("player")
+                    .then(ClientCommands.literal("clear").executes(ctx -> {
+                        YugiClient.outlinedPlayers.clear();
+                        YugiClient.entityOutlineAll = false;
+                        ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rAll player outlines cleared"));
+                        return 1;
+                    }))
                     .then(ClientCommands.argument("playername", StringArgumentType.word())
                         .suggests(YugiMCCommand::suggestPlayerNames)
                         .executes(ctx -> {
@@ -79,6 +85,12 @@ public class YugiMCCommand {
                     )
                 )
                 .then(ClientCommands.literal("entity")
+                    .then(ClientCommands.literal("clear").executes(ctx -> {
+                        YugiClient.outlinedEntities.clear();
+                        YugiClient.entityOutlineAll = false;
+                        ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rAll entity outlines cleared"));
+                        return 1;
+                    }))
                     .then(ClientCommands.argument("entityname", StringArgumentType.word())
                         .suggests(YugiMCCommand::suggestEntityNames)
                         .executes(ctx -> {
@@ -116,7 +128,7 @@ public class YugiMCCommand {
                 )
                 .then(ClientCommands.literal("list")
                     .executes(ctx -> {
-                        ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rUse /yugimc outline on, /yugimc outline off, /yugimc outline player <name>, or /yugimc outline entity <name>"));
+                        ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rUse /yugimc outline on, /yugimc outline off, /yugimc outline player <name>, /yugimc outline entity <name>, /yugimc outline player clear, or /yugimc outline entity clear"));
                         return 1;
                     })
                 )
