@@ -120,6 +120,16 @@ public class YugiMCCommand {
                     )
                 )
                 .then(ClientCommands.literal("block")
+                    .then(ClientCommands.literal("clear").executes(ctx -> {
+                        YugiClient.entityOutlineAll = false;
+                        YugiClient.outlinedEntities.clear();
+                        YugiClient.outlinedPlayers.clear();
+                        YugiClient.outlinedBlockTypes.clear();
+                        YugiClient.outlinedBlocks.clear();
+                        YugiClient.cachedBlockPositions.clear();
+                        ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rAll outlines cleared"));
+                        return 1;
+                    }))
                     .then(ClientCommands.argument("blockname", StringArgumentType.word())
                         .suggests(YugiMCCommand::suggestBlockNames)
                         .executes(ctx -> {
