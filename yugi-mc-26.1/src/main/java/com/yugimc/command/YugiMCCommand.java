@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class YugiMCCommand {
+public class YugiMCCommand { // Feature: Commands (Outline, Fakelag, IP)
 
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandBuildContext commandBuildContext) {
         dispatcher.register(ClientCommands.literal("yugimc")
@@ -215,7 +215,6 @@ public class YugiMCCommand {
             List<String> names = new ArrayList<>();
             for (var entity : level.entitiesForRendering()) {
                 if (!(entity instanceof Player)) {
-                    names.add(entity.getName().getString());
                     names.add(EntityType.getKey(entity.getType()).getPath());
                 }
             }

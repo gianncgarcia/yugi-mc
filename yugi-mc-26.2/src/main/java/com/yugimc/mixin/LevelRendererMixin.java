@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LevelRenderer.class)
-public class LevelRendererMixin {
+public class LevelRendererMixin { // Feature: Block Outline
 
     @Inject(method = "collectPerFrameRenderThreadGizmos", at = @At("RETURN"))
     private void onCollectGizmos(CallbackInfoReturnable<TemporaryCollection> cir) {

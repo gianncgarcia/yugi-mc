@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public class LivingEntityMixin {
+public class LivingEntityMixin { // Feature: Anti Blind
 
     @Inject(method = "getEffectBlendFactor", at = @At("HEAD"), cancellable = true)
     private void onGetEffectBlendFactor(Holder<MobEffect> registryEntry, float delta, CallbackInfoReturnable<Float> cir) {

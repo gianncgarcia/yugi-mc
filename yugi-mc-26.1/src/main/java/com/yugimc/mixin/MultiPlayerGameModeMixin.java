@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 @Mixin(MultiPlayerGameMode.class)
-public class MultiPlayerGameModeMixin {
+public class MultiPlayerGameModeMixin { // Feature: No Mining Cooldown
 
     @ModifyConstant(method = "continueDestroyBlock", constant = @Constant(intValue = 5))
     private int onContinueDestroyBlock(int value) {

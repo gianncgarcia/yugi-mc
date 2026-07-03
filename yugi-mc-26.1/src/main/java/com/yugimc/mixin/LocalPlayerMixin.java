@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LocalPlayer.class)
-public class LocalPlayerMixin {
+public class LocalPlayerMixin { // Feature: Portal GUI
 
     @Inject(method = "handlePortalTransitionEffect", at = @At("HEAD"), cancellable = true)
     private void onHandlePortalTransitionEffect(boolean bl, CallbackInfo ci) {

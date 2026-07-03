@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityRenderer.class)
-public abstract class EntityRendererMixin {
+public abstract class EntityRendererMixin { // Feature: Nametag Sneak
 
     @Inject(method = "extractRenderState", at = @At("TAIL"))
     private void onExtractRenderState(Entity entity, EntityRenderState renderState, float tickDelta, CallbackInfo ci) {

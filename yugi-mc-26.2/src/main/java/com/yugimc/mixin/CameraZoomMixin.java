@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Camera.class)
-public class CameraZoomMixin {
+public class CameraZoomMixin { // Feature: Zoom
 
     @Inject(method = "calculateFov", at = @At("RETURN"), cancellable = true)
     private void onCalculateFov(float partialTicks, CallbackInfoReturnable<Float> ci) {

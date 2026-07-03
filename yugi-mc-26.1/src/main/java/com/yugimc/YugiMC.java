@@ -5,7 +5,7 @@ import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class YugiMC implements ModInitializer {
+public class YugiMC implements ModInitializer { // Feature: Core (Mod Entry Point)
     public static final Logger LOGGER = LoggerFactory.getLogger("yugi-mc");
 
     public static boolean initialized;

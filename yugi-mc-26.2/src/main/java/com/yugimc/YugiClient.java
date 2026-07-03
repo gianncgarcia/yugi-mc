@@ -19,7 +19,7 @@ import java.util.Map;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.Packet;
 
-public enum YugiClient {
+public enum YugiClient { // Feature: Core / All Features
     cliente;
 
     // Configuration Flags
@@ -153,7 +153,7 @@ public enum YugiClient {
     // Minecraft Client Instance
     public static Minecraft client;
 
-    public void initialize() {
+    public void initialize() { // Feature: Core / All Features
         client = Minecraft.getInstance();
 
         var keyEntityOutline = KeyMappingHelper.registerKeyMapping(new KeyMapping("Entity Outline",
@@ -190,6 +190,7 @@ public enum YugiClient {
                 GLFW.GLFW_KEY_UNKNOWN,
                 YUGI_CATEGORY));
 
+        // Feature: Keybind Handlers
         ClientTickEvents.END_CLIENT_TICK.register(tickClient -> {
             if (client.player == null) return;
 
@@ -275,6 +276,7 @@ public enum YugiClient {
                 }
             }
 
+            // Feature: Block Outline (Scan)
             if (!outlinedBlockTypes.isEmpty()) {
                 long now = System.currentTimeMillis();
                 if (now - lastBlockScanTime > 1000) {
@@ -310,6 +312,7 @@ public enum YugiClient {
                 }
             }
 
+            // Feature: FakeLag (Tick)
             if (fakeLagEnabled) {
                 long now = System.currentTimeMillis();
                 if (now - lastFlushTime >= fakelagDelay) {
@@ -325,6 +328,7 @@ public enum YugiClient {
 
         ModCommandRegister.registerCommands();
 
+        // Feature: State Reset
         ClientPlayConnectionEvents.DISCONNECT.register(((listener, client1) -> {
             outlinedEntities.clear();
             outlinedPlayers.clear();

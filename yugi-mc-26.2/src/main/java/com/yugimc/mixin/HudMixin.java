@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.ArrayList;
 
 @Mixin(Hud.class)
-public class HudMixin {
+public class HudMixin { // Feature: HUD Overlay
 
     @Inject(method = "extractRenderState", at = @At("TAIL"))
     private void onExtractRenderState(GuiGraphicsExtractor extractor, DeltaTracker delta, CallbackInfo ci) {

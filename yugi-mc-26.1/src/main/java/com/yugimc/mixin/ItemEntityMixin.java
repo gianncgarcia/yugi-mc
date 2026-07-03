@@ -10,17 +10,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemEntity.class)
-public class ItemEntityMixin {
+public class ItemEntityMixin { // Feature: Fast Pickup / Pickup Magnet
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void onTick(CallbackInfo ci) {
         ItemEntity self = (ItemEntity) (Object) this;
         if (!self.level().isClientSide()) return;
 
+        // Feature: Fast Pickup
         if (YugiClient.fastPickup) {
             self.setPickUpDelay(0);
         }
 
+        // Feature: Pickup Magnet
         if (!YugiClient.pickupMagnet) return;
 
         Player nearest = null;

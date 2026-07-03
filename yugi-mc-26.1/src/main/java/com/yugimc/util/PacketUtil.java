@@ -3,7 +3,7 @@ package com.yugimc.util;
 import com.yugimc.YugiClient;
 import net.minecraft.network.Connection;
 
-public class PacketUtil {
+public class PacketUtil { // Feature: FakeLag
     public static Connection connectionForFlush;
 
     public static void flushPackets() {
