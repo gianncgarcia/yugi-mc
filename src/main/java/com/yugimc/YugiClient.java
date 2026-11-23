@@ -19,7 +19,8 @@ public enum YugiClient {
     cliente;
 
     // Configuration Flags
-    public static boolean vanillaspoof = true;
+    public static boolean brandspoof = true;
+    public static String brandspoofText = "vanilla";
     public static boolean hstoggledOn = true; // No Hurtcam / shake
     public static boolean abtoggleOn = true; // Anti-blind for warden blind
     public static boolean zoomOn = false;
@@ -53,7 +54,7 @@ public enum YugiClient {
         KeyBinding k = KeyBindingHelper.registerKeyBinding(new KeyBinding("Hurt Shake",
                 GLFW.GLFW_KEY_UNKNOWN,
                 "Yugi+"));
-        KeyBinding sf = KeyBindingHelper.registerKeyBinding(new KeyBinding("Vanilla Spoof",
+        KeyBinding sf = KeyBindingHelper.registerKeyBinding(new KeyBinding("Brand Spoof",
                 GLFW.GLFW_KEY_UNKNOWN,
                 "Yugi+"));
         KeyBinding kk = KeyBindingHelper.registerKeyBinding(new KeyBinding("Anti Blind",
@@ -110,16 +111,16 @@ public enum YugiClient {
             if (CONFIG_BIND.wasPressed()) {
                 //client.setScreen(new EntitySelector(null));
             }
-            //Vanilla Spoof
+            //Brand Spoof
             if (sf.wasPressed()) {
-                if (vanillaspoof) {
-                    vanillaspoof = false;
-                    client.player.sendMessage(Text.of("§a[Yugi+] §rDisabled Vanilla Spoofing"), false);
+                if (brandspoof) {
+                    brandspoof = false;
+                    client.player.sendMessage(Text.of("§a[Yugi+] §rDisabled Brand Spoofing"), false);
 
                 }
                 else  {
-                    vanillaspoof = true;
-                    client.player.sendMessage(Text.of("§a[Yugi+] §rEnabled Vanilla Spoofing"), false);
+                    brandspoof = true;
+                    client.player.sendMessage(Text.of("§a[Yugi+] §rEnabled Brand Spoofing"), false);
                 }
             }
             // Hurtcam shake

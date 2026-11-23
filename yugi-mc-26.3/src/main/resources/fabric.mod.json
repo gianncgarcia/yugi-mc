@@ -1,0 +1,31 @@
+{
+    "schemaVersion": 1,
+    "id": "yugi-mc",
+    "version": "${version}",
+    "name": "Yugi MC",
+    "description": "Client-side utility mod: entity/block outlines, zoom, anti-blind, brand spoof, portal GUI, HUD overlay and more. Built with Fabric + Mixins.",
+    "authors": [
+        "gianncgarcia"
+    ],
+    "contact": {
+        "homepage": "https://github.com/gianncgarcia/yugi-mc",
+        "sources": "https://github.com/gianncgarcia/yugi-mc"
+    },
+    "license": "CC0-1.0",
+    "icon": "assets/yugi-mc/icon.png",
+    "environment": "client",
+    "entrypoints": {
+        "main": [
+            "com.yugimc.YugiMC"
+        ]
+    },
+    "mixins": [
+        "yugi-mc.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=0.19.5",
+        "minecraft": "~26.3",
+        "java": ">=25",
+        "fabric-api": "*"
+    }
+}

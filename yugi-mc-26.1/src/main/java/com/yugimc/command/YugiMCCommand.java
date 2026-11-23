@@ -43,6 +43,13 @@ public class YugiMCCommand { // Feature: Commands (Outline, Fakelag, IP)
                     ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rAll Entity Outline Disabled"));
                     return 1;
                 }))
+                .then(ClientCommands.literal("clear").executes(ctx -> {
+                    YugiClient.entityOutlineAll = false;
+                    YugiClient.outlinedEntities.clear();
+                    YugiClient.outlinedPlayers.clear();
+                    ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rAll outlines cleared"));
+                    return 1;
+                }))
                 .then(ClientCommands.literal("player")
                     .then(ClientCommands.literal("clear").executes(ctx -> {
                         YugiClient.outlinedPlayers.clear();
@@ -129,7 +136,7 @@ public class YugiMCCommand { // Feature: Commands (Outline, Fakelag, IP)
                 )
                 .then(ClientCommands.literal("list")
                     .executes(ctx -> {
-                        ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rUse /yugimc outline on, /yugimc outline off, /yugimc outline player <name>, /yugimc outline entity <name>, /yugimc outline player clear, or /yugimc outline entity clear"));
+                        ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rUse /yugimc outline on, /yugimc outline off, /yugimc outline clear, /yugimc outline player <name>, /yugimc outline entity <name>, /yugimc outline player clear, or /yugimc outline entity clear"));
                         return 1;
                     })
                 )
@@ -154,6 +161,22 @@ public class YugiMCCommand { // Feature: Commands (Outline, Fakelag, IP)
                         (YugiClient.fakelagRandomize ? "§aOn" : "§cOff") + "§r)"));
                     ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rUsage: /yugimc fakelag <delay(0-5000)>"));
                     ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rUsage: /yugimc fakelag randomize"));
+                    return 1;
+                })
+            )
+            .then(ClientCommands.literal("brandspoof")
+                .then(ClientCommands.argument("text", StringArgumentType.greedyString())
+                    .executes(ctx -> {
+                        String text = StringArgumentType.getString(ctx, "text");
+                        YugiClient.brandSpoofText = text;
+                        YugiClient.brandSpoof = true;
+                        ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rBrandSpoof text set to: §f" + text));
+                        return 1;
+                    })
+                )
+                .executes(ctx -> {
+                    ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rCurrent BrandSpoof: §f" + YugiClient.brandSpoofText + " §7(" + (YugiClient.brandSpoof ? "§aOn" : "§cOff") + "§7)"));
+                    ctx.getSource().sendFeedback(Component.literal("§a[Yugi+] §rUsage: /yugimc brandspoof <text>"));
                     return 1;
                 })
             )

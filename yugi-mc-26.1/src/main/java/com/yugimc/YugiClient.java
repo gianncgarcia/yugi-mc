@@ -22,7 +22,8 @@ public enum YugiClient { // Feature: Core / All Features
     cliente;
 
     // Configuration Flags
-    public static boolean vanillaSpoof = true;
+    public static boolean brandSpoof = true;
+    public static String brandSpoofText = "vanilla";
     public static boolean noHurtCam = true;
     public static boolean antiBlind = true;
     public static boolean zoomEnabled = false;
@@ -156,7 +157,7 @@ public enum YugiClient { // Feature: Core / All Features
         var keyNametagSneak = KeyMappingHelper.registerKeyMapping(new KeyMapping("Nametag Sneak",
                 GLFW.GLFW_KEY_UNKNOWN,
                 YUGI_CATEGORY));
-        var keyVanillaSpoof = KeyMappingHelper.registerKeyMapping(new KeyMapping("Vanilla Spoof",
+        var keyBrandSpoof = KeyMappingHelper.registerKeyMapping(new KeyMapping("Brand Spoof",
                 GLFW.GLFW_KEY_UNKNOWN,
                 YUGI_CATEGORY));
         var keyAntiBlind = KeyMappingHelper.registerKeyMapping(new KeyMapping("Anti Blind",
@@ -200,10 +201,10 @@ public enum YugiClient { // Feature: Core / All Features
                     nametagSneak ? "§a[Yugi+] §rNametag Sneak Visibility On" : "§a[Yugi+] §rNametag Sneak Visibility Off"));
             }
 
-            if (keyVanillaSpoof.consumeClick()) {
-                vanillaSpoof = !vanillaSpoof;
+            if (keyBrandSpoof.consumeClick()) {
+                brandSpoof = !brandSpoof;
                 client.player.sendSystemMessage(Component.literal(
-                    vanillaSpoof ? "§a[Yugi+] §rEnabled Vanilla Spoofing" : "§a[Yugi+] §rDisabled Vanilla Spoofing"));
+                    brandSpoof ? "§a[Yugi+] §rEnabled Brand Spoofing" : "§a[Yugi+] §rDisabled Brand Spoofing"));
             }
 
             if (keyAntiBlind.consumeClick()) {

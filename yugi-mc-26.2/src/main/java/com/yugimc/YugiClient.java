@@ -23,7 +23,8 @@ public enum YugiClient { // Feature: Core / All Features
     cliente;
 
     // Configuration Flags
-    public static boolean vanillaSpoof = true;
+    public static boolean brandSpoof = true;
+    public static String brandSpoofText = "vanilla";
     public static boolean noHurtCam = true;
     public static boolean antiBlind = true;
     public static boolean zoomEnabled = false;
@@ -162,7 +163,7 @@ public enum YugiClient { // Feature: Core / All Features
         var keyNametagSneak = KeyMappingHelper.registerKeyMapping(new KeyMapping("Nametag Sneak",
                 GLFW.GLFW_KEY_UNKNOWN,
                 YUGI_CATEGORY));
-        var keyVanillaSpoof = KeyMappingHelper.registerKeyMapping(new KeyMapping("Vanilla Spoof",
+        var keyBrandSpoof = KeyMappingHelper.registerKeyMapping(new KeyMapping("Brand Spoof",
                 GLFW.GLFW_KEY_UNKNOWN,
                 YUGI_CATEGORY));
         var keyAntiBlind = KeyMappingHelper.registerKeyMapping(new KeyMapping("Anti Blind",
@@ -206,10 +207,10 @@ public enum YugiClient { // Feature: Core / All Features
                     nametagSneak ? "§a[Yugi+] §rNametag Sneak Visibility On" : "§a[Yugi+] §rNametag Sneak Visibility Off"));
             }
 
-            if (keyVanillaSpoof.consumeClick()) {
-                vanillaSpoof = !vanillaSpoof;
+            if (keyBrandSpoof.consumeClick()) {
+                brandSpoof = !brandSpoof;
                 client.player.sendSystemMessage(Component.literal(
-                    vanillaSpoof ? "§a[Yugi+] §rEnabled Vanilla Spoofing" : "§a[Yugi+] §rDisabled Vanilla Spoofing"));
+                    brandSpoof ? "§a[Yugi+] §rEnabled Brand Spoofing" : "§a[Yugi+] §rDisabled Brand Spoofing"));
             }
 
             if (keyAntiBlind.consumeClick()) {
@@ -279,15 +280,17 @@ public enum YugiClient { // Feature: Core / All Features
             // Feature: Block Outline (Scan)
             if (!outlinedBlockTypes.isEmpty()) {
                 long now = System.currentTimeMillis();
-                if (now - lastBlockScanTime > 1000) {
+                if (now - lastBlockScanTime > 5000) {
                     lastBlockScanTime = now;
                     cachedBlockPositions.clear();
                     var level = client.level;
                     if (level != null) {
                         var playerPos = client.player.blockPosition();
+                        int range = Math.min(client.options.renderDistance().get() * 16, 64);
                         int px = playerPos.getX();
                         int pz = playerPos.getZ();
-                        int range = blockScanRange;
+                        int minY = Math.max(level.getMinY(), playerPos.getY() - 32);
+                        int maxY = Math.min(level.getMaxY(), playerPos.getY() + 32);
                         var mutable = new net.minecraft.core.BlockPos.MutableBlockPos();
                         for (int x = px - range; x <= px + range; x += 16) {
                             for (int z = pz - range; z <= pz + range; z += 16) {
@@ -296,9 +299,7 @@ public enum YugiClient { // Feature: Core / All Features
                                 int cz = Math.min(z + 15, pz + range);
                                 for (int bx = x; bx <= cx; bx++) {
                                     for (int bz = z; bz <= cz; bz++) {
-                                        int minY = Math.max(level.getMinY(), playerPos.getY() - 16);
-                                        int maxY = Math.min(level.getMaxY(), playerPos.getY() + 16);
-                                        for (int by = minY; by <= maxY; by++) {
+                                        for (int by = minY; by < maxY; by++) {
                                             var state = level.getBlockState(mutable.set(bx, by, bz));
                                             if (outlinedBlocks.contains(state.getBlock())) {
                                                 cachedBlockPositions.add(mutable.immutable());

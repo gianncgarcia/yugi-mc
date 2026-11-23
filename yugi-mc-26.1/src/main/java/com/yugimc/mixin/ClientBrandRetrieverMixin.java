@@ -8,12 +8,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ClientBrandRetriever.class)
-public abstract class ClientBrandRetrieverMixin { // Feature: Vanilla Spoof
+public abstract class ClientBrandRetrieverMixin { // Feature: Brand Spoof
 
     @Inject(at = @At("HEAD"), method = "getClientModName", cancellable = true)
     private static void getClientModName(CallbackInfoReturnable<String> callback) {
-        if (YugiClient.vanillaSpoof) {
-            callback.setReturnValue("vanilla");
+        if (YugiClient.brandSpoof) {
+            callback.setReturnValue(YugiClient.brandSpoofText);
         }
     }
 }

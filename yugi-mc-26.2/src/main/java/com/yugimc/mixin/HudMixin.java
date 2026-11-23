@@ -25,7 +25,7 @@ public class HudMixin { // Feature: HUD Overlay
         Font font = self.getFont();
         var lines = new ArrayList<String>();
 
-        if (YugiClient.vanillaSpoof) lines.add("§7VanillaSpoof: §aOn");
+        if (YugiClient.brandSpoof) lines.add("§7BrandSpoof: §f" + YugiClient.brandSpoofText);
         if (YugiClient.noHurtCam) lines.add("§7NoHurtCam: §aOn");
         if (YugiClient.antiBlind) lines.add("§7AntiBlind: §aOn");
         if (YugiClient.zoomEnabled) lines.add("§7Zoom: §aOn");
